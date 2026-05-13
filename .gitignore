@@ -1,3 +1,11 @@
+# ============================================================
+# ML Chat — Git Ignore Rules
+# Everything in dev/ stays local. Only root files go to GitHub.
+# ============================================================
+
+# Developer workspace (local notes, caches, experiments, drafts)
+dev/
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -9,11 +17,15 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Downloaded libraries (loaded from CDN)
+# Downloaded libraries (loaded from CDN at runtime)
 transformers.min.js
+transformers.js
 *.min.js.map
 
-# Transformers.js model cache (IndexedDB is used at runtime, but local folders may appear)
+# ONNX Runtime WASM binaries (downloaded by browser on first run)
+ort-wasm*.wasm
+
+# Model caches that may appear locally
 models/
 cached_models/
 .onnx/
@@ -22,11 +34,16 @@ cached_models/
 *.log
 npm-debug.log*
 
-# Local environment / secrets
+# Environment / secrets (never commit these)
 .env
 .env.local
+.env.*.local
 secrets/
+*.pem
+*.key
 
-# Internal development notes
-shared-context.md
-*.agent-logs/
+# Node modules (if ever added)
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
