@@ -3,8 +3,15 @@
 # Everything in dev/ stays local. Only root files go to GitHub.
 # ============================================================
 
-# Developer workspace (local notes, caches, experiments, drafts)
+# Developer workspace (local notes, caches, experiments, drafts, dev tools)
 dev/
+
+# Development scripts directory (push.sh and other local helpers)
+scripts/
+
+# Auto-generated artifact directories (created by browser/runtime)
+css/
+js/
 
 # OS files
 .DS_Store
