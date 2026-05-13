@@ -1,0 +1,32 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Downloaded libraries (loaded from CDN)
+transformers.min.js
+*.min.js.map
+
+# Transformers.js model cache (IndexedDB is used at runtime, but local folders may appear)
+models/
+cached_models/
+.onnx/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local environment / secrets
+.env
+.env.local
+secrets/
+
+# Internal development notes
+shared-context.md
+*.agent-logs/
