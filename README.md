@@ -74,8 +74,8 @@ All models are downloaded automatically on first load and cached for future sess
 ```
 mlchat/
 ├── index.html          # Complete application (single file)
-├── shared-context.md   # Project context & development notes
-└── README.md           # This file
+├── README.md           # This file
+└── LICENSE             # MIT License
 ```
 
 The entire app is intentionally a **single HTML file** — no bundler, no package manager, no deployment pipeline. Open it and it works.
