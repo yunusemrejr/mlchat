@@ -1,6 +1,5 @@
 # ============================================================
 # ML Chat — Git Ignore Rules
-# Everything in dev/ stays local. Only root files go to GitHub.
 # ============================================================
 
 # Developer workspace (local notes, caches, experiments, drafts, dev tools)
@@ -54,3 +53,9 @@ node_modules/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

@@ -25,20 +25,41 @@
 
 ## 🚀 Quick Start
 
-No build step. No dependencies to install. Just open the file.
+No build step. No dependencies to install.
+
+### Option 1: Python Flask Server (Recommended)
 
 ```bash
-# Clone the repo
+git clone https://github.com/yunusemrejr/mlchat.git
+cd mlchat
+pip install flask    # First time only
+python run.py        # Start the server
+```
+
+Then open **http://localhost:5000** in your browser.
+
+### Option 2: Simple HTTP Server
+
+```bash
 git clone https://github.com/yunusemrejr/mlchat.git
 cd mlchat
 
-# Open in your browser
-open index.html        # macOS
-xdg-open index.html    # Linux
-start index.html       # Windows
+# Python
+python -m http.server 8000
+
+# Node.js
+npx serve .
 ```
 
-Or simply drag `index.html` into any modern browser.
+Then open **http://localhost:8000** in your browser.
+
+### Option 3: VS Code Live Server
+
+Right-click `index.html` → "Open with Live Server".
+
+---
+
+> **Note:** Due to browser security restrictions on ES modules, the app requires a local HTTP server. It cannot be opened directly via `file://`.
 
 ---
 
