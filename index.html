@@ -6,90 +6,50 @@
 <title>ML Chat — Local AI Assistant</title>
 <style>
 /* ============================================================
-   CSS VARIABLES — Dark Mode Design System (Linear × Claude hybrid)
+   CSS VARIABLES — Dark Mode Design System
    ============================================================ */
 :root {
-  /* Background layers */
   --bg-base: #0d0d0f;
   --bg-surface: #16161a;
   --bg-elevated: #1c1c21;
   --bg-overlay: #24242a;
   --bg-input: #1a1a20;
-
-  /* Borders */
   --border-subtle: rgba(255,255,255,0.06);
   --border-default: rgba(255,255,255,0.1);
   --border-strong: rgba(255,255,255,0.16);
-
-  /* Text */
   --text-primary: #ededed;
   --text-secondary: #a1a1aa;
   --text-tertiary: #71717a;
   --text-inverse: #0d0d0f;
-
-  /* Accent */
   --accent: #6c63ff;
   --accent-hover: #7b73ff;
   --accent-glow: rgba(108,99,255,0.15);
   --accent-subtle: rgba(108,99,255,0.08);
-
-  /* Status */
   --status-positive: #22c55e;
   --status-positive-bg: rgba(34,197,94,0.1);
   --status-warning: #f59e0b;
   --status-warning-bg: rgba(245,158,11,0.1);
   --status-negative: #ef4444;
   --status-negative-bg: rgba(239,68,68,0.1);
-  --status-info: #3b82f6;
-  --status-info-bg: rgba(59,130,246,0.1);
-
-  /* Sentiment colors */
-  --sentiment-positive: #22c55e;
-  --sentiment-neutral: #f59e0b;
-  --sentiment-negative: #ef4444;
-
-  /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
-
-  /* Sizing */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
-
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
   --shadow-lg: 0 10px 25px rgba(0,0,0,0.4), 0 6px 10px rgba(0,0,0,0.3);
-  --shadow-glow: 0 0 20px var(--accent-glow);
-
-  /* Transitions */
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
-
-  /* Layout */
   --sidebar-width: 280px;
   --header-height: 56px;
   --input-height: 80px;
   --max-chat-width: 840px;
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {
   font-family: var(--font-sans);
   background: var(--bg-base);
@@ -100,17 +60,11 @@ body {
   height: 100dvh;
 }
 
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
-/* ============================================================
-   LAYOUT — App Shell
-   ============================================================ */
 .app {
   display: flex;
   height: 100vh;
@@ -118,7 +72,6 @@ body {
   overflow: hidden;
 }
 
-/* Sidebar */
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-surface);
@@ -129,12 +82,7 @@ body {
   transition: transform var(--transition-normal), width var(--transition-normal);
   z-index: 10;
 }
-
-.sidebar.collapsed {
-  width: 0;
-  transform: translateX(-100%);
-}
-
+.sidebar.collapsed { width: 0; transform: translateX(-100%); }
 .sidebar-header {
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-subtle);
@@ -143,7 +91,6 @@ body {
   justify-content: space-between;
   min-height: var(--header-height);
 }
-
 .sidebar-logo {
   display: flex;
   align-items: center;
@@ -152,16 +99,9 @@ body {
   font-weight: 600;
   color: var(--text-primary);
 }
-
-.sidebar-logo svg {
-  width: 22px;
-  height: 22px;
-  color: var(--accent);
-}
-
+.sidebar-logo svg { width: 22px; height: 22px; color: var(--accent); }
 .sidebar-new-chat {
-  width: 32px;
-  height: 32px;
+  width: 32px; height: 32px;
   border: 1px solid var(--border-default);
   background: transparent;
   border-radius: var(--radius-sm);
@@ -172,19 +112,16 @@ body {
   justify-content: center;
   transition: all var(--transition-fast);
 }
-
 .sidebar-new-chat:hover {
   background: var(--bg-elevated);
   border-color: var(--border-strong);
   color: var(--text-primary);
 }
-
 .conversation-list {
   flex: 1;
   overflow-y: auto;
   padding: 8px;
 }
-
 .conversation-group-label {
   font-size: 11px;
   font-weight: 600;
@@ -193,7 +130,6 @@ body {
   letter-spacing: 0.05em;
   padding: 12px 12px 6px;
 }
-
 .conversation-item {
   padding: 10px 12px;
   border-radius: var(--radius-sm);
@@ -208,24 +144,9 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.conversation-item:hover {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-}
-
-.conversation-item.active {
-  background: var(--accent-subtle);
-  color: var(--text-primary);
-}
-
-.conversation-item svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
-
+.conversation-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.conversation-item.active { background: var(--accent-subtle); color: var(--text-primary); }
+.conversation-item svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.6; }
 .conversation-item .delete-btn {
   margin-left: auto;
   opacity: 0;
@@ -236,20 +157,12 @@ body {
   cursor: pointer;
   padding: 2px;
 }
-
-.conversation-item:hover .delete-btn {
-  opacity: 1;
-}
-
-.conversation-item .delete-btn:hover {
-  color: var(--status-negative);
-}
-
+.conversation-item:hover .delete-btn { opacity: 1; }
+.conversation-item .delete-btn:hover { color: var(--status-negative); }
 .sidebar-footer {
   padding: 12px 16px;
   border-top: 1px solid var(--border-subtle);
 }
-
 .sidebar-footer-item {
   display: flex;
   align-items: center;
@@ -261,18 +174,9 @@ body {
   cursor: pointer;
   transition: background var(--transition-fast);
 }
+.sidebar-footer-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.sidebar-footer-item svg { width: 16px; height: 16px; }
 
-.sidebar-footer-item:hover {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-}
-
-.sidebar-footer-item svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Main Content */
 .main {
   flex: 1;
   display: flex;
@@ -281,7 +185,6 @@ body {
   position: relative;
 }
 
-/* Header */
 .header {
   height: var(--header-height);
   min-height: var(--header-height);
@@ -292,10 +195,8 @@ body {
   gap: 12px;
   background: var(--bg-surface);
 }
-
 .header-toggle {
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   border: 1px solid var(--border-default);
   background: transparent;
   border-radius: var(--radius-sm);
@@ -306,19 +207,8 @@ body {
   justify-content: center;
   transition: all var(--transition-fast);
 }
-
-.header-toggle:hover {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-}
-
-.header-title {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
+.header-toggle:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.header-title { flex: 1; font-size: 15px; font-weight: 600; color: var(--text-primary); }
 .header-model {
   font-size: 12px;
   color: var(--text-tertiary);
@@ -327,7 +217,6 @@ body {
   border-radius: 20px;
   border: 1px solid var(--border-subtle);
 }
-
 .header-status {
   display: flex;
   align-items: center;
@@ -335,34 +224,26 @@ body {
   font-size: 12px;
   color: var(--text-tertiary);
 }
-
 .status-dot {
-  width: 7px;
-  height: 7px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--text-tertiary);
 }
-
 .status-dot.ready { background: var(--status-positive); }
 .status-dot.loading { background: var(--status-warning); animation: pulse 1.5s infinite; }
 .status-dot.error { background: var(--status-negative); }
-
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
 
-/* Chat Messages */
 .chat-container {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
   scroll-behavior: smooth;
 }
-
-.chat-scroll-anchor {
-  height: 1px;
-}
+.chat-scroll-anchor { height: 1px; }
 
 .welcome-message {
   display: flex;
@@ -375,10 +256,8 @@ body {
   max-width: 520px;
   margin: 0 auto;
 }
-
 .welcome-icon {
-  width: 64px;
-  height: 64px;
+  width: 64px; height: 64px;
   background: var(--accent-subtle);
   border-radius: var(--radius-lg);
   display: flex;
@@ -386,34 +265,15 @@ body {
   justify-content: center;
   margin-bottom: 24px;
 }
-
-.welcome-icon svg {
-  width: 32px;
-  height: 32px;
-  color: var(--accent);
-}
-
-.welcome-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-
-.welcome-subtitle {
-  font-size: 15px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 32px;
-}
-
+.welcome-icon svg { width: 32px; height: 32px; color: var(--accent); }
+.welcome-title { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.welcome-subtitle { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 32px; }
 .welcome-suggestions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 8px;
   width: 100%;
 }
-
 .suggestion-card {
   padding: 14px 16px;
   background: var(--bg-surface);
@@ -423,13 +283,11 @@ body {
   text-align: left;
   transition: all var(--transition-fast);
 }
-
 .suggestion-card:hover {
   border-color: var(--border-strong);
   background: var(--bg-elevated);
   transform: translateY(-1px);
 }
-
 .suggestion-card .suggestion-label {
   font-size: 11px;
   font-weight: 600;
@@ -438,75 +296,42 @@ body {
   letter-spacing: 0.05em;
   margin-bottom: 4px;
 }
-
 .suggestion-card .suggestion-text {
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.5;
 }
 
-/* Message Bubbles */
 .message {
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
   animation: messageIn 0.3s ease-out;
 }
-
 @keyframes messageIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .message-avatar {
-  width: 32px;
-  height: 32px;
+  width: 32px; height: 32px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
-
-.message.user .message-avatar {
-  background: var(--accent);
-  color: white;
-}
-
-.message.assistant .message-avatar {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  color: var(--accent);
-}
-
-.message-avatar svg {
-  width: 18px;
-  height: 18px;
-}
-
-.message-content {
-  flex: 1;
-  min-width: 0;
-}
-
+.message.user .message-avatar { background: var(--accent); color: white; }
+.message.assistant .message-avatar { background: var(--bg-elevated); border: 1px solid var(--border-subtle); color: var(--accent); }
+.message-avatar svg { width: 18px; height: 18px; }
+.message-content { flex: 1; min-width: 0; }
 .message-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 4px;
 }
-
-.message-author {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.message-time {
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
-
+.message-author { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.message-time { font-size: 11px; color: var(--text-tertiary); }
 .message-text {
   font-size: 14px;
   line-height: 1.7;
@@ -514,15 +339,8 @@ body {
   white-space: pre-wrap;
   word-break: break-word;
 }
-
-.message-text p {
-  margin-bottom: 12px;
-}
-
-.message-text p:last-child {
-  margin-bottom: 0;
-}
-
+.message-text p { margin-bottom: 12px; }
+.message-text p:last-child { margin-bottom: 0; }
 .message-text code {
   background: var(--bg-overlay);
   padding: 2px 6px;
@@ -530,7 +348,6 @@ body {
   font-family: var(--font-mono);
   font-size: 13px;
 }
-
 .message-text pre {
   background: var(--bg-overlay);
   border: 1px solid var(--border-subtle);
@@ -539,85 +356,32 @@ body {
   overflow-x: auto;
   margin: 12px 0;
 }
+.message-text pre code { background: none; padding: 0; }
 
-.message-text pre code {
-  background: none;
-  padding: 0;
-}
-
-/* Sentiment & Intent Badges */
-.message-meta {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-
-.meta-badge {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.meta-badge.intent {
-  background: var(--status-info-bg);
-  color: var(--status-info);
-  border: 1px solid rgba(59,130,246,0.2);
-}
-
-.meta-badge.sentiment-positive {
-  background: var(--status-positive-bg);
-  color: var(--status-positive);
-  border: 1px solid rgba(34,197,94,0.2);
-}
-
-.meta-badge.sentiment-neutral {
-  background: var(--status-warning-bg);
-  color: var(--status-warning);
-  border: 1px solid rgba(245,158,11,0.2);
-}
-
-.meta-badge.sentiment-negative {
-  background: var(--status-negative-bg);
-  color: var(--status-negative);
-  border: 1px solid rgba(239,68,68,0.2);
-}
-
-/* Typing indicator */
 .typing-indicator {
   display: flex;
   gap: 4px;
   padding: 4px 0;
 }
-
 .typing-indicator span {
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--text-tertiary);
   animation: typing 1.4s infinite ease-in-out;
 }
-
 .typing-indicator span:nth-child(1) { animation-delay: 0s; }
 .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
 @keyframes typing {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
   40% { transform: scale(1); opacity: 1; }
 }
 
-/* Input Area */
 .input-area {
   padding: 16px 24px 20px;
   background: var(--bg-surface);
   border-top: 1px solid var(--border-subtle);
 }
-
 .input-wrapper {
   max-width: var(--max-chat-width);
   margin: 0 auto;
@@ -625,7 +389,6 @@ body {
   gap: 12px;
   align-items: flex-end;
 }
-
 .input-field {
   flex: 1;
   background: var(--bg-input);
@@ -641,19 +404,13 @@ body {
   line-height: 1.5;
   max-height: 150px;
 }
-
-.input-field::placeholder {
-  color: var(--text-tertiary);
-}
-
+.input-field::placeholder { color: var(--text-tertiary); }
 .input-field:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
-
 .send-btn {
-  width: 44px;
-  height: 44px;
+  width: 44px; height: 44px;
   border-radius: var(--radius-md);
   background: var(--accent);
   border: none;
@@ -665,25 +422,25 @@ body {
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }
-
-.send-btn:hover:not(:disabled) {
-  background: var(--accent-hover);
-  transform: scale(1.05);
+.send-btn:hover:not(:disabled) { background: var(--accent-hover); transform: scale(1.05); }
+.send-btn:active:not(:disabled) { transform: scale(0.95); }
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.send-btn svg { width: 20px; height: 20px; }
+.stop-btn {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--status-negative-bg);
+  border: 1px solid var(--status-negative-bg);
+  color: var(--status-negative);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
-
-.send-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.send-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.send-btn svg {
-  width: 20px;
-  height: 20px;
-}
+.stop-btn:hover { background: var(--status-negative-bg); border-color: var(--status-negative); }
+.stop-btn svg { width: 20px; height: 20px; }
 
 .input-footer {
   max-width: var(--max-chat-width);
@@ -694,19 +451,9 @@ body {
   font-size: 11px;
   color: var(--text-tertiary);
 }
+.input-footer-left { display: flex; gap: 16px; }
+.input-footer span { display: flex; align-items: center; gap: 4px; }
 
-.input-footer-left {
-  display: flex;
-  gap: 16px;
-}
-
-.input-footer span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Loading Overlay */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -718,41 +465,18 @@ body {
   z-index: 1000;
   transition: opacity var(--transition-slow);
 }
-
-.loading-overlay.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
 .loading-spinner {
-  width: 48px;
-  height: 48px;
+  width: 48px; height: 48px;
   border: 3px solid var(--border-subtle);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 24px;
 }
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loading-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-
-.loading-subtitle {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  text-align: center;
-  max-width: 320px;
-  line-height: 1.6;
-}
-
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-title { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.loading-subtitle { font-size: 13px; color: var(--text-tertiary); text-align: center; max-width: 320px; line-height: 1.6; }
 .loading-progress {
   margin-top: 24px;
   width: 200px;
@@ -761,7 +485,6 @@ body {
   border-radius: 2px;
   overflow: hidden;
 }
-
 .loading-progress-bar {
   height: 100%;
   background: var(--accent);
@@ -770,7 +493,6 @@ body {
   width: 0%;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -780,7 +502,6 @@ body {
   flex-direction: column;
   gap: 8px;
 }
-
 .toast {
   padding: 12px 16px;
   background: var(--bg-elevated);
@@ -795,72 +516,32 @@ body {
   animation: toastIn 0.3s ease-out;
   max-width: 360px;
 }
-
-.toast.toast-exit {
-  animation: toastOut 0.3s ease-in forwards;
-}
-
+.toast.toast-exit { animation: toastOut 0.3s ease-in forwards; }
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(40px); }
   to { opacity: 1; transform: translateX(0); }
 }
-
 @keyframes toastOut {
   from { opacity: 1; transform: translateX(0); }
   to { opacity: 0; transform: translateX(40px); }
 }
-
-.toast svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
+.toast svg { width: 16px; height: 16px; flex-shrink: 0; }
 .toast.success svg { color: var(--status-positive); }
 .toast.error svg { color: var(--status-negative); }
 .toast.warning svg { color: var(--status-warning); }
 .toast.info svg { color: var(--status-info); }
 
-/* Mobile Responsive */
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    z-index: 100;
-  }
-
-  .sidebar.collapsed {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-  }
-
-  .chat-container {
-    padding: 16px;
-  }
-
-  .input-area {
-    padding: 12px 16px 16px;
-  }
-
-  .welcome-suggestions {
-    grid-template-columns: 1fr;
-  }
-
-  .header-title {
-    font-size: 14px;
-  }
-
-  .header-model {
-    display: none;
-  }
+  .sidebar { position: fixed; left: 0; top: 0; height: 100vh; z-index: 100; }
+  .sidebar.collapsed { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .chat-container { padding: 16px; }
+  .input-area { padding: 12px 16px 16px; }
+  .welcome-suggestions { grid-template-columns: 1fr; }
+  .header-title { font-size: 14px; }
+  .header-model { display: none; }
 }
 
-/* Mobile overlay for sidebar */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -868,32 +549,16 @@ body {
   z-index: 99;
   display: none;
 }
+.sidebar-overlay.visible { display: block; }
 
-.sidebar-overlay.visible {
-  display: block;
-}
-
-/* Error boundary */
 .error-boundary {
   padding: 40px;
   text-align: center;
   max-width: 480px;
   margin: 0 auto;
 }
-
-.error-boundary h2 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  color: var(--status-negative);
-}
-
-.error-boundary p {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 24px;
-}
-
+.error-boundary h2 { font-size: 18px; margin-bottom: 12px; color: var(--status-negative); }
+.error-boundary p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
 .retry-btn {
   padding: 10px 24px;
   background: var(--accent);
@@ -904,32 +569,40 @@ body {
   cursor: pointer;
   transition: background var(--transition-fast);
 }
+.retry-btn:hover { background: var(--accent-hover); }
 
-.retry-btn:hover {
-  background: var(--accent-hover);
+.message-text.streaming::after {
+  content: '\25CF';
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-left: 4px;
+  animation: blink 1s infinite;
+  font-size: 0;
+  vertical-align: middle;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 </style>
 </head>
 <body>
 
-<!-- Loading Overlay -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-spinner"></div>
   <div class="loading-title">Initializing ML Chat</div>
-  <div class="loading-subtitle" id="loadingSubtitle">Loading models from CDN…</div>
+  <div class="loading-subtitle" id="loadingSubtitle">Loading AI model…</div>
   <div class="loading-progress">
     <div class="loading-progress-bar" id="loadingProgress"></div>
   </div>
 </div>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- Sidebar Overlay (mobile) -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="app">
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
@@ -944,9 +617,7 @@ body {
         </svg>
       </button>
     </div>
-    <div class="conversation-list" id="conversationList">
-      <!-- Populated by JS -->
-    </div>
+    <div class="conversation-list" id="conversationList"></div>
     <div class="sidebar-footer">
       <div class="sidebar-footer-item" id="clearAllBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -957,9 +628,7 @@ body {
     </div>
   </aside>
 
-  <!-- Main Content -->
   <main class="main">
-    <!-- Header -->
     <header class="header">
       <button class="header-toggle" id="toggleSidebar" title="Toggle sidebar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -967,16 +636,14 @@ body {
         </svg>
       </button>
       <div class="header-title">ML Chat</div>
-      <div class="header-model" id="modelBadge">Transformers.js</div>
+      <div class="header-model" id="modelBadge">TinyLlama 1.1B</div>
       <div class="header-status">
         <span class="status-dot" id="statusDot"></span>
         <span id="statusText">Initializing…</span>
       </div>
     </header>
 
-    <!-- Chat Container -->
     <div class="chat-container" id="chatContainer">
-      <!-- Welcome Message -->
       <div class="welcome-message" id="welcomeMessage">
         <div class="welcome-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -985,7 +652,7 @@ body {
         </div>
         <h1 class="welcome-title">Welcome to ML Chat</h1>
         <p class="welcome-subtitle">
-          A fully client-side AI assistant powered by Transformers.js.
+          A fully client-side AI assistant powered by Transformers.js and TinyLlama.
           All processing happens in your browser — no data leaves your device.
         </p>
         <div class="welcome-suggestions">
@@ -1007,10 +674,8 @@ body {
           </div>
         </div>
       </div>
-      <!-- Messages will be appended here -->
     </div>
 
-    <!-- Input Area -->
     <div class="input-area">
       <div class="input-wrapper">
         <textarea
@@ -1025,6 +690,11 @@ body {
             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
           </svg>
         </button>
+        <button class="stop-btn" id="stopBtn" style="display:none" title="Stop generation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="6" width="12" height="12"/>
+          </svg>
+        </button>
       </div>
       <div class="input-footer">
         <div class="input-footer-left">
@@ -1037,67 +707,32 @@ body {
   </main>
 </div>
 
-<!-- ============================================================
-     JAVASCRIPT — ML Pipeline + UI Controller
-     ============================================================ -->
 <script type="module">
 // ============================================================
 // CONFIGURATION
 // ============================================================
 const CONFIG = {
-  // Model configurations from Hugging Face via Transformers.js
-  models: {
-    // Small sentiment analysis model (~35MB)
-    sentiment: {
-      model: 'Xenova/distilbert-base-uncased-finetuned-sst-2-english',
-      task: 'sentiment-analysis',
-      quantized: true
-    },
-    // Zero-shot classification for intent detection (~250MB)
-    // We use a smaller alternative for browser feasibility
-    intent: {
-      model: 'Xenova/bart-base-mnli',
-      task: 'zero-shot-classification',
-      quantized: true
-    },
-    // Text generation fallback using a small GPT-2
-    generation: {
-      model: 'Xenova/distilgpt2',
-      task: 'text-generation',
-      quantized: true
-    }
-  },
-  // Intent classification labels
-  intentLabels: [
-    'greeting', 'question', 'statement', 'request',
-    'emotional', 'creative', 'technical', 'casual'
-  ],
-  // Max tokens for generation
-  maxTokens: 150,
+  model: 'Xenova/TinyLlama-1.1B-Chat-v1.0',
+  maxTokens: 1024,
   temperature: 0.7,
   topK: 50,
-  // Worker script as inline blob
+  maxHistoryMessages: 10,
+  systemPrompt: "You are ML Chat, a helpful AI assistant. You provide detailed, thoughtful, and accurate responses. You can discuss science, technology, programming, creative writing, and general knowledge. Always be helpful, harmless, and honest."
 };
 
-// ============================================================
-// STATE MANAGEMENT
-// ============================================================
 const state = {
-  status: 'loading', // loading, ready, error
+  status: 'loading',
   conversations: [],
   activeConversationId: null,
-  pipeline: null,
-  sentimentPipeline: null,
-  intentPipeline: null,
-  generationPipeline: null,
   worker: null,
   workerReady: false,
-  isGenerating: false
+  isGenerating: false,
+  abortController: null,
+  currentStreamMessageId: null,
+  useWorker: true,
+  generator: null
 };
 
-// ============================================================
-// DOM REFERENCES
-// ============================================================
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -1111,6 +746,7 @@ const dom = {
   welcomeMessage: $('#welcomeMessage'),
   messageInput: $('#messageInput'),
   sendBtn: $('#sendBtn'),
+  stopBtn: $('#stopBtn'),
   sidebar: $('#sidebar'),
   sidebarOverlay: $('#sidebarOverlay'),
   conversationList: $('#conversationList'),
@@ -1123,10 +759,6 @@ const dom = {
   charCount: $('#charCount'),
   toastContainer: $('#toastContainer')
 };
-
-// ============================================================
-// UTILITY FUNCTIONS
-// ============================================================
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -1151,21 +783,15 @@ function showToast(message, type = 'info') {
     warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
     info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
   };
-
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.innerHTML = `${icons[type] || icons.info} ${escapeHtml(message)}`;
   dom.toastContainer.appendChild(toast);
-
   setTimeout(() => {
     toast.classList.add('toast-exit');
     setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
-
-// ============================================================
-// CONVERSATION MANAGEMENT (IndexedDB via localStorage fallback)
-// ============================================================
 
 function saveConversations() {
   try {
@@ -1180,12 +806,8 @@ function loadConversations() {
   try {
     const data = localStorage.getItem('mlchat_conversations');
     const active = localStorage.getItem('mlchat_active');
-    if (data) {
-      state.conversations = JSON.parse(data);
-    }
-    if (active) {
-      state.activeConversationId = active;
-    }
+    if (data) state.conversations = JSON.parse(data);
+    if (active) state.activeConversationId = active;
   } catch (e) {
     console.warn('Failed to load from localStorage:', e);
   }
@@ -1211,7 +833,6 @@ function getActiveConversation() {
 function addMessageToConversation(role, content, meta = {}) {
   const conv = getActiveConversation();
   if (!conv) return;
-
   conv.messages.push({
     id: generateId(),
     role,
@@ -1219,12 +840,9 @@ function addMessageToConversation(role, content, meta = {}) {
     meta,
     timestamp: Date.now()
   });
-
-  // Update title from first user message
   if (conv.messages.length === 1 && role === 'user') {
     conv.title = content.slice(0, 50) + (content.length > 50 ? '…' : '');
   }
-
   saveConversations();
 }
 
@@ -1247,43 +865,26 @@ function clearAllConversations() {
   showToast('All conversations cleared', 'success');
 }
 
-// ============================================================
-// RENDERING
-// ============================================================
-
 function renderConversationList() {
-  // Group by time using direct timestamp comparison
   const now = Date.now();
   const oneDay = 24 * 60 * 60 * 1000;
-
   const today = state.conversations.filter(conv => now - conv.createdAt < oneDay);
   const earlier = state.conversations.filter(conv => now - conv.createdAt >= oneDay);
-
   let html = '';
-
   if (today.length > 0) {
     html += '<div class="conversation-group-label">Today</div>';
-    today.forEach(conv => {
-      html += renderConversationItem(conv);
-    });
+    today.forEach(conv => { html += renderConversationItem(conv); });
   }
-
   if (earlier.length > 0) {
     html += '<div class="conversation-group-label">Earlier</div>';
-    earlier.forEach(conv => {
-      html += renderConversationItem(conv);
-    });
+    earlier.forEach(conv => { html += renderConversationItem(conv); });
   }
-
   dom.conversationList.innerHTML = html;
-
-  // Bind click handlers
   dom.conversationList.querySelectorAll('.conversation-item').forEach(el => {
     el.addEventListener('click', (e) => {
       if (e.target.closest('.delete-btn')) {
         e.stopPropagation();
-        const id = el.dataset.id;
-        deleteConversation(id);
+        deleteConversation(el.dataset.id);
         return;
       }
       state.activeConversationId = el.dataset.id;
@@ -1313,35 +914,31 @@ function renderConversationItem(conv) {
 
 function renderMessages() {
   const conv = getActiveConversation();
-
   if (!conv || conv.messages.length === 0) {
     dom.welcomeMessage.style.display = '';
-    // Remove all message elements
     dom.chatContainer.querySelectorAll('.message').forEach(el => el.remove());
     return;
   }
-
   dom.welcomeMessage.style.display = 'none';
-
-  // Clear existing messages
   dom.chatContainer.querySelectorAll('.message').forEach(el => el.remove());
-
-  // Render each message
-  conv.messages.forEach(msg => {
-    appendMessageToDOM(msg);
-  });
-
+  conv.messages.forEach(msg => { appendMessageToDOM(msg); });
   scrollToBottom();
 }
 
-function appendMessageToDOM(msg) {
+function appendMessageToDOM(msg, isStreaming = false) {
   dom.welcomeMessage.style.display = 'none';
-
   const isUser = msg.role === 'user';
-  const metaHtml = renderMetaBadges(msg.meta);
-
+  const existing = document.getElementById(msg.id);
+  if (existing) {
+    const textEl = existing.querySelector('.message-text');
+    textEl.innerHTML = formatMessageContent(msg.content);
+    if (isStreaming) textEl.classList.add('streaming');
+    else textEl.classList.remove('streaming');
+    return;
+  }
   const div = document.createElement('div');
   div.className = `message ${msg.role}`;
+  div.id = msg.id;
   div.innerHTML = `
     <div class="message-avatar">
       ${isUser
@@ -1354,49 +951,19 @@ function appendMessageToDOM(msg) {
         <span class="message-author">${isUser ? 'You' : 'ML Chat'}</span>
         <span class="message-time">${formatTime(new Date(msg.timestamp))}</span>
       </div>
-      <div class="message-text">${formatMessageContent(msg.content)}</div>
-      ${metaHtml ? `<div class="message-meta">${metaHtml}</div>` : ''}
+      <div class="message-text ${isStreaming ? 'streaming' : ''}">${formatMessageContent(msg.content)}</div>
     </div>
   `;
-
-  dom.chatContainer.insertBefore(div, dom.chatContainer.querySelector('.chat-scroll-anchor') || null);
-}
-
-function renderMetaBadges(meta) {
-  if (!meta || (!meta.intent && !meta.sentiment)) return '';
-
-  let html = '';
-  if (meta.intent) {
-    html += `<span class="meta-badge intent">🎯 ${escapeHtml(meta.intent)}</span>`;
-  }
-  if (meta.sentiment) {
-    const sentimentClass = `sentiment-${meta.sentiment.toLowerCase()}`;
-    const icons = { positive: '😊', neutral: '😐', negative: '😔' };
-    const icon = icons[meta.sentiment.toLowerCase()] || '';
-    html += `<span class="meta-badge ${sentimentClass}">${icon} ${escapeHtml(meta.sentiment)}</span>`;
-  }
-  return html;
+  dom.chatContainer.appendChild(div);
 }
 
 function formatMessageContent(text) {
-  // Simple markdown-like formatting
   let html = escapeHtml(text);
-
-  // Code blocks
   html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
-
-  // Inline code
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-  // Bold
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-
-  // Italic
   html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-
-  // Line breaks
   html = html.replace(/\n/g, '<br>');
-
   return `<p>${html}</p>`;
 }
 
@@ -1406,205 +973,124 @@ function scrollToBottom() {
   });
 }
 
-// ============================================================
-// WORKER SCRIPT (inline blob)
-// ============================================================
+function updateStatus(status) {
+  state.status = status;
+  dom.statusDot.className = 'status-dot ' + status;
+  const texts = { loading: 'Initializing…', ready: 'Ready', error: 'Error' };
+  dom.statusText.textContent = texts[status] || 'Unknown';
+}
 
+function enableInput() {
+  dom.messageInput.disabled = false;
+  dom.sendBtn.disabled = false;
+  dom.sendBtn.style.display = '';
+  dom.stopBtn.style.display = 'none';
+  dom.messageInput.focus();
+}
+
+function disableInput() {
+  dom.messageInput.disabled = true;
+  dom.sendBtn.disabled = true;
+}
+
+function showStopButton() {
+  dom.sendBtn.style.display = 'none';
+  dom.stopBtn.style.display = '';
+}
+
+// ============================================================
+// WORKER
+// ============================================================
 const workerScript = `
-// Web Worker for ML inference
-import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
+import { pipeline, env } from './transformers.js';
 
-// Skip local model check - we always use CDN
 env.allowLocalModels = false;
 env.useBrowserCache = true;
+if (env.backends?.onnx?.wasm) {
+  env.backends.onnx.wasm.wasmPaths = './';
+}
 
-let sentimentPipe = null;
-let intentPipe = null;
-let generationPipe = null;
+let generator = null;
+let isGenerating = false;
 
-// Progress callback
 self.onmessage = async function(e) {
   const { type, payload } = e.data;
 
   if (type === 'INIT') {
     try {
-      // Load sentiment analysis pipeline
-      self.postMessage({ type: 'PROGRESS', payload: 'Loading sentiment model…' });
-      sentimentPipe = await pipeline('sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', {
+      self.postMessage({ type: 'PROGRESS', payload: { text: 'Loading TinyLlama chat model…', percent: 10 } });
+      generator = await pipeline('text-generation', payload.model, {
         quantized: true,
-        progress_callback: (progress) => {
-          if (progress.status === 'downloading') {
-            const pct = Math.round((progress.loaded / progress.total) * 100);
-            self.postMessage({ type: 'MODEL_PROGRESS', payload: { model: 'sentiment', progress: pct } });
+        progress_callback: (p) => {
+          if (p.status === 'downloading' && p.total > 0) {
+            const pct = Math.round((p.loaded / p.total) * 80) + 10;
+            self.postMessage({ type: 'PROGRESS', payload: { text: \`Downloading \${p.file || 'model files'}…\`, percent: pct } });
+          } else if (p.status === 'ready') {
+            self.postMessage({ type: 'PROGRESS', payload: { text: 'Model ready!', percent: 100 } });
           }
         }
       });
-
-      // Load zero-shot classification for intent
-      self.postMessage({ type: 'PROGRESS', payload: 'Loading intent model…' });
-      intentPipe = await pipeline('zero-shot-classification', 'Xenova/bart-base-mnli', {
-        quantized: true,
-        progress_callback: (progress) => {
-          if (progress.status === 'downloading') {
-            const pct = Math.round((progress.loaded / progress.total) * 100);
-            self.postMessage({ type: 'MODEL_PROGRESS', payload: { model: 'intent', progress: pct } });
-          }
-        }
-      });
-
-      // Load text generation pipeline (smaller model for browser)
-      self.postMessage({ type: 'PROGRESS', payload: 'Loading generation model…' });
-      generationPipe = await pipeline('text-generation', 'Xenova/distilgpt2', {
-        quantized: true,
-        progress_callback: (progress) => {
-          if (progress.status === 'downloading') {
-            const pct = Math.round((progress.loaded / progress.total) * 100);
-            self.postMessage({ type: 'MODEL_PROGRESS', payload: { model: 'generation', progress: pct } });
-          }
-        }
-      });
-
       self.postMessage({ type: 'READY' });
     } catch (err) {
+      self.postMessage({ type: 'ERROR', payload: err.message + '\\n' + err.stack });
+    }
+  }
+
+  else if (type === 'GENERATE') {
+    if (!generator) {
+      self.postMessage({ type: 'ERROR', payload: 'Model not loaded' });
+      return;
+    }
+    isGenerating = true;
+    try {
+      const prompt = generator.tokenizer.apply_chat_template(payload.messages, {
+        tokenize: false,
+        add_generation_prompt: true
+      });
+      const promptIds = generator.tokenizer.encode(prompt);
+      const promptLength = promptIds.length;
+
+      let streamedText = '';
+
+      const callback_function = (beams) => {
+        if (!isGenerating) return;
+        const beam = beams[0];
+        const generatedIds = beam.output_token_ids.slice(promptLength);
+        const generated = generator.tokenizer.decode(generatedIds, { skip_special_tokens: true });
+        const delta = generated.slice(streamedText.length);
+        if (delta) {
+          streamedText = generated;
+          self.postMessage({ type: 'STREAM', payload: delta });
+        }
+      };
+
+      const result = await generator(prompt, {
+        max_new_tokens: payload.maxTokens,
+        temperature: payload.temperature,
+        top_k: payload.topK,
+        do_sample: true,
+        callback_function,
+        num_beams: 1
+      });
+
+      isGenerating = false;
+      const finalText = result[0]?.generated_text || '';
+      let response = finalText;
+      if (finalText.startsWith(prompt)) {
+        response = finalText.slice(prompt.length).trim();
+      }
+      self.postMessage({ type: 'COMPLETE', payload: response || streamedText.trim() });
+    } catch (err) {
+      isGenerating = false;
       self.postMessage({ type: 'ERROR', payload: err.message });
     }
   }
 
-  else if (type === 'INFERENCE') {
-    const { text, intentLabels } = payload;
-
-    try {
-      // Run all three in parallel for speed
-      const [sentimentResult, intentResult, generationResult] = await Promise.all([
-        // Sentiment
-        sentimentPipe(text, { topk: 1 }),
-
-        // Intent classification
-        intentPipe(text, {
-          candidate_labels: intentLabels,
-          topk: 1
-        }),
-
-        // Text generation
-        generationPipe(text, {
-          max_new_tokens: 120,
-          temperature: 0.7,
-          top_k: 50,
-          do_sample: true,
-          pad_token_id: 50256
-        })
-      ]);
-
-      // Process results
-      const sentiment = sentimentResult[0];
-      const intent = intentResult;
-      const generatedText = generationResult[0].generated_text;
-
-      // Extract just the new generated part (remove input prompt)
-      let response = generatedText;
-      if (generatedText.startsWith(text)) {
-        response = generatedText.slice(text.length).trim();
-      }
-
-      // Clean up response
-      response = response.replace(/^["']|["']$/g, '').trim();
-
-      // If response is empty or nonsensical, use fallback
-      if (!response || response.length < 3) {
-        response = generateFallbackResponse(text, intent.labels[0], sentiment.label);
-      }
-
-      self.postMessage({
-        type: 'RESULT',
-        payload: {
-          response,
-          intent: intent.labels[0],
-          intentScore: intent.scores[0],
-          sentiment: sentiment.label,
-          sentimentScore: sentiment.score
-        }
-      });
-    } catch (err) {
-      self.postMessage({ type: 'ERROR', payload: err.message });
-    }
+  else if (type === 'STOP') {
+    isGenerating = false;
   }
 };
-
-// Fallback response generator (rule-based)
-function generateFallbackResponse(text, intent, sentiment) {
-  const lower = text.toLowerCase();
-
-  // Greeting responses
-  if (intent === 'greeting' || /\\b(hi|hello|hey|good morning|good afternoon|good evening)\\b/i.test(lower)) {
-    const greetings = [
-      "Hello! How can I assist you today?",
-      "Hi there! What's on your mind?",
-      "Hey! Great to chat with you. What would you like to discuss?",
-      "Hello! I'm here to help. What can I do for you?"
-    ];
-    return greetings[Math.floor(Math.random() * greetings.length)];
-  }
-
-  // Emotional support
-  if (intent === 'emotional' || sentiment === 'NEGATIVE') {
-    if (/stress|anxious|worried|overwhelmed/i.test(lower)) {
-      return "I hear you. Stress can feel overwhelming. Try taking a few deep breaths — inhale for 4 counts, hold for 4, exhale for 6. Would you like to talk about what's bothering you?";
-    }
-    if (/sad|depressed|unhappy|down/i.test(lower)) {
-      return "I'm sorry you're feeling this way. It's okay to have difficult days. Sometimes writing about your feelings or talking to someone you trust can help. I'm here to listen if you'd like to share more.";
-    }
-    if (/angry|frustrated|annoyed/i.test(lower)) {
-      return "It sounds like you're feeling frustrated, and that's completely valid. Would it help to talk through what happened? Sometimes putting it into words can provide clarity.";
-    }
-    return "I sense this might be important to you. I'm here to listen — feel free to share more if you'd like.";
-  }
-
-  // Positive sentiment
-  if (sentiment === 'POSITIVE') {
-    if (/thank/i.test(lower)) {
-      return "You're very welcome! I'm glad I could help. Is there anything else you'd like to explore?";
-    }
-    return "That's wonderful to hear! I'm happy for you. Would you like to tell me more about it?";
-  }
-
-  // Creative requests
-  if (intent === 'creative' || /write|create|poem|story|haiku/i.test(lower)) {
-    if (/haiku/i.test(lower)) {
-      return "Code flows like water\\nPixels dance on silent screens\\nLogic blooms in loops";
-    }
-    if (/poem/i.test(lower)) {
-      return "In circuits deep where thoughts take flight,\\nA spark of code, a burst of light.\\nThrough silicon veins, ideas stream,\\nBuilding worlds inside a dream.";
-    }
-    return "I'd love to help you create! Could you give me a bit more direction? What kind of content are you looking to write — a story, poem, article, or something else?";
-  }
-
-  // Technical questions
-  if (intent === 'technical' || /how|what|why|explain|define|code|program/i.test(lower)) {
-    if (/quantum/i.test(lower)) {
-      return "Quantum computing uses quantum bits (qubits) that can be 0 and 1 at the same time (superposition). Unlike classical bits, qubits can process many possibilities simultaneously. Think of it like flipping a coin — classical computing is like the coin being heads OR tails; quantum is like it spinning — both at once until it lands. This lets quantum computers solve certain problems (like cryptography, drug discovery) much faster than classical computers.";
-    }
-    if (/javascript|js/i.test(lower)) {
-      return "JavaScript is a versatile programming language that powers interactive web experiences. It runs in browsers and on servers (Node.js), handles everything from button clicks to complex applications, and is known for its flexibility and massive ecosystem of libraries like React, Vue, and Express.";
-    }
-    return "That's a great question! Let me think about this… Based on what you're asking, I'd say the key is to break it down into smaller parts. Could you give me a bit more context so I can provide a more specific answer?";
-  }
-
-  // Default responses
-  const defaults = [
-    "That's an interesting point. Tell me more about what you're thinking.",
-    "I understand. What else would you like to discuss?",
-    "Thanks for sharing that. How can I help you further?",
-    "I'm processing what you've said. Would you like to elaborate?",
-    "Got it. Is there something specific you'd like to know or do?"
-  ];
-
-  return defaults[Math.floor(Math.random() * defaults.length)];
-}
 `;
-
-// ============================================================
-// WORKER INITIALIZATION
-// ============================================================
 
 function initWorker() {
   try {
@@ -1616,407 +1102,371 @@ function initWorker() {
     state.worker.onmessage = handleWorkerMessage;
     state.worker.onerror = (err) => {
       console.error('Worker error:', err);
-      showToast('Worker error: ' + err.message, 'error');
-      handleWorkerError('Worker runtime error');
+      fallbackToMainThread('Worker failed to start: ' + err.message);
     };
 
-    // Start initialization
-    state.worker.postMessage({ type: 'INIT' });
+    state.worker.postMessage({ type: 'INIT', payload: { model: CONFIG.model } });
 
-    // Timeout: if worker doesn't become ready in 3 minutes, show error
     state._initTimeout = setTimeout(() => {
       if (!state.workerReady) {
         state.worker.terminate();
-        handleWorkerError('Model loading timed out after 3 minutes');
+        fallbackToMainThread('Model loading timed out after 5 minutes');
       }
-    }, 180000);
+    }, 300000);
   } catch (err) {
-    // Worker construction failed (synchronous throw)
-    handleWorkerError('Worker construction failed: ' + err.message);
+    console.warn('Worker creation failed, falling back to main thread:', err);
+    fallbackToMainThread(err.message);
   }
 }
 
 function handleWorkerMessage(e) {
   const { type, payload } = e.data;
-
   switch (type) {
-    case 'PROGRESS':
-      dom.loadingSubtitle.textContent = payload;
-      break;
-
-    case 'MODEL_PROGRESS': {
-      if (!state._lastModelProgress) state._lastModelProgress = {};
-      const modelWeights = { sentiment: 0.2, intent: 0.5, generation: 0.3 };
-      const weight = modelWeights[payload.model] || 0.33;
-      const last = state._lastModelProgress[payload.model] || 0;
-      const delta = Math.max(0, payload.progress - last);
-      state._lastModelProgress[payload.model] = payload.progress;
-      const currentProgress = parseFloat(dom.loadingProgress.style.width) || 0;
-      const newProgress = currentProgress + (delta / 100) * weight * 100;
-      dom.loadingProgress.style.width = Math.min(newProgress, 90) + '%';
+    case 'PROGRESS': {
+      dom.loadingSubtitle.textContent = payload.text;
+      dom.loadingProgress.style.width = payload.percent + '%';
       break;
     }
-
-    case 'READY':
-      state.status = 'ready';
+    case 'READY': {
       state.workerReady = true;
-      state._lastModelProgress = {};
       clearTimeout(state._initTimeout);
       dom.loadingProgress.style.width = '100%';
-      dom.loadingSubtitle.textContent = 'Models loaded successfully!';
-
+      dom.loadingSubtitle.textContent = 'Model loaded successfully!';
       setTimeout(() => {
         dom.loadingOverlay.classList.add('hidden');
         updateStatus('ready');
         enableInput();
-        dom.modelInfo.textContent = 'Model: DistilGPT-2 + DistilBERT + BART';
-        dom.pipelineInfo.textContent = 'Pipeline: Sentiment + Intent + Generation';
-        dom.modelBadge.textContent = 'Transformers.js';
-
-        // Auto-create first conversation
-        if (state.conversations.length === 0) {
-          createConversation();
-        }
+        dom.modelInfo.textContent = 'Model: TinyLlama 1.1B Chat';
+        dom.pipelineInfo.textContent = 'Pipeline: Text Generation';
+        dom.modelBadge.textContent = 'TinyLlama 1.1B';
+        if (state.conversations.length === 0) createConversation();
         renderConversationList();
         renderMessages();
       }, 500);
       break;
-
-    case 'RESULT':
-      handleInferenceResult(payload);
+    }
+    case 'STREAM': {
+      handleStreamToken(payload);
       break;
-
-    case 'ERROR':
-      handleWorkerError(payload);
+    }
+    case 'COMPLETE': {
+      finalizeGeneration(payload);
       break;
+    }
+    case 'ERROR': {
+      handleGenerationError(payload);
+      break;
+    }
   }
 }
 
-function handleInferenceResult(result) {
-  state.isGenerating = false;
+// ============================================================
+// FALLBACK: Main-thread inference
+// ============================================================
+async function fallbackToMainThread(reason) {
+  console.warn('Falling back to main-thread inference:', reason);
+  state.useWorker = false;
+  showToast('Running on main thread. UI may freeze during generation.', 'warning');
 
-  // Remove typing indicator
-  const typingEl = dom.chatContainer.querySelector('.typing-message');
-  if (typingEl) typingEl.remove();
+  try {
+    const { pipeline, env } = await import('./transformers.js');
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+    if (env.backends?.onnx?.wasm) {
+      env.backends.onnx.wasm.wasmPaths = './';
+    }
 
-  // Add assistant response
-  addMessageToConversation('assistant', result.response, {
-    intent: result.intent,
-    sentiment: result.sentiment
-  });
+    dom.loadingSubtitle.textContent = 'Loading model on main thread…';
+    state.generator = await pipeline('text-generation', CONFIG.model, {
+      quantized: true,
+      progress_callback: (p) => {
+        if (p.status === 'downloading' && p.total > 0) {
+          const pct = Math.round((p.loaded / p.total) * 90);
+          dom.loadingProgress.style.width = pct + '%';
+          dom.loadingSubtitle.textContent = `Downloading ${p.file || 'model files'}…`;
+        }
+      }
+    });
 
-  appendMessageToDOM({
-    role: 'assistant',
-    content: result.response,
-    meta: { intent: result.intent, sentiment: result.sentiment },
-    timestamp: Date.now()
-  });
-
-  scrollToBottom();
-  enableInput();
+    dom.loadingProgress.style.width = '100%';
+    dom.loadingSubtitle.textContent = 'Model loaded!';
+    setTimeout(() => {
+      dom.loadingOverlay.classList.add('hidden');
+      updateStatus('ready');
+      enableInput();
+      dom.modelInfo.textContent = 'Model: TinyLlama 1.1B Chat (main thread)';
+      dom.pipelineInfo.textContent = 'Pipeline: Text Generation';
+      dom.modelBadge.textContent = 'TinyLlama 1.1B';
+      if (state.conversations.length === 0) createConversation();
+      renderConversationList();
+      renderMessages();
+    }, 500);
+  } catch (err) {
+    console.error('Main thread fallback also failed:', err);
+    dom.loadingOverlay.classList.add('hidden');
+    updateStatus('error');
+    showToast('Failed to load model: ' + err.message, 'error');
+    enableInput();
+  }
 }
 
-function handleWorkerError(errorMsg) {
-  state.isGenerating = false;
-
-  // Hide loading overlay if still visible
-  dom.loadingOverlay.classList.add('hidden');
-  dom.loadingSubtitle.textContent = 'Error loading models';
-
-  updateStatus('error');
-
-  // Remove typing indicator
-  const typingEl = dom.chatContainer.querySelector('.typing-message');
-  if (typingEl) typingEl.remove();
-
-  // If error occurred during initialization (before READY), don't add fallback message
-  // The user hasn't sent a message yet; just show error toast and allow retry
-  if (state.status === 'loading') {
-    showToast('Initialization error: ' + errorMsg, 'error');
+async function generateOnMainThread(messages) {
+  if (!state.generator) {
+    showToast('Model not loaded', 'error');
     return;
   }
+  state.isGenerating = true;
+  showStopButton();
+  state.abortController = new AbortController();
 
-  // Auto-create conversation so input is usable (for inference-time errors)
-  if (state.conversations.length === 0) {
-    createConversation();
-    renderConversationList();
+  try {
+    const prompt = state.generator.tokenizer.apply_chat_template(messages, {
+      tokenize: false,
+      add_generation_prompt: true
+    });
+    const promptIds = state.generator.tokenizer.encode(prompt);
+    const promptLength = promptIds.length;
+
+    let streamedText = '';
+    const callback_function = (beams) => {
+      if (state.abortController?.signal.aborted) return;
+      const beam = beams[0];
+      const generatedIds = beam.output_token_ids.slice(promptLength);
+      const generated = state.generator.tokenizer.decode(generatedIds, { skip_special_tokens: true });
+      const delta = generated.slice(streamedText.length);
+      if (delta) {
+        streamedText = generated;
+        handleStreamToken(delta);
+      }
+    };
+
+    const result = await state.generator(prompt, {
+      max_new_tokens: CONFIG.maxTokens,
+      temperature: CONFIG.temperature,
+      top_k: CONFIG.topK,
+      do_sample: true,
+      callback_function,
+      num_beams: 1
+    });
+
+    if (!state.abortController?.signal.aborted) {
+      const finalText = result[0]?.generated_text || '';
+      let response = finalText;
+      if (finalText.startsWith(prompt)) {
+        response = finalText.slice(prompt.length).trim();
+      }
+      finalizeGeneration(response || streamedText.trim());
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      handleGenerationError(err.message);
+    }
   }
-
-  // Show fallback response
-  const fallbackMsg = "I apologize — I encountered an issue processing your message. This may be due to model loading. Please try again, or rephrase your message. If the problem persists, try refreshing the page.";
-
-  addMessageToConversation('assistant', fallbackMsg, {});
-  appendMessageToDOM({
-    role: 'assistant',
-    content: fallbackMsg,
-    meta: {},
-    timestamp: Date.now()
-  });
-
-  scrollToBottom();
-  enableInput();
-
-  showToast('Inference error: ' + errorMsg, 'error');
 }
 
 // ============================================================
-// STATUS MANAGEMENT
+// MESSAGE SENDING & STREAMING
 // ============================================================
-
-function updateStatus(status) {
-  state.status = status;
-  dom.statusDot.className = 'status-dot ' + status;
-
-  const statusTexts = {
-    loading: 'Initializing…',
-    ready: 'Ready',
-    error: 'Error'
-  };
-  dom.statusText.textContent = statusTexts[status] || 'Unknown';
+function getMessagesForPrompt() {
+  const conv = getActiveConversation();
+  if (!conv) return [];
+  const msgs = [{ role: 'system', content: CONFIG.systemPrompt }];
+  const recent = conv.messages.slice(-CONFIG.maxHistoryMessages);
+  recent.forEach(m => msgs.push({ role: m.role, content: m.content }));
+  return msgs;
 }
-
-function enableInput() {
-  dom.messageInput.disabled = false;
-  dom.sendBtn.disabled = false;
-  dom.messageInput.focus();
-}
-
-function disableInput() {
-  dom.messageInput.disabled = true;
-  dom.sendBtn.disabled = true;
-}
-
-// ============================================================
-// MESSAGE SENDING
-// ============================================================
 
 async function sendMessage(text) {
   if (!text.trim() || state.isGenerating) return;
-  if (state.status === 'error') {
-    sendFallbackResponse(text.trim());
-    return;
-  }
-  if (state.status !== 'ready') return;
 
-  // Hide welcome message
   dom.welcomeMessage.style.display = 'none';
-
-  // Create conversation if none exists
   if (!getActiveConversation()) {
     createConversation();
     renderConversationList();
   }
 
-  // Add user message
   addMessageToConversation('user', text.trim());
-  appendMessageToDOM({
-    role: 'user',
-    content: text.trim(),
-    meta: {},
-    timestamp: Date.now()
-  });
-
-  // Clear input
-  dom.messageInput.value = '';
-  dom.messageInput.style.height = 'auto';
-  dom.charCount.textContent = '0';
-
-  scrollToBottom();
-  disableInput();
-  state.isGenerating = true;
-
-  // Show typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'message assistant typing-message';
-  typingDiv.innerHTML = `
-    <div class="message-avatar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6v-2H9v2z"/></svg>
-    </div>
-    <div class="message-content">
-      <div class="message-header">
-        <span class="message-author">ML Chat</span>
-        <span class="message-time">${formatTime(new Date())}</span>
-      </div>
-      <div class="typing-indicator">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-  `;
-  dom.chatContainer.appendChild(typingDiv);
-  scrollToBottom();
-
-  // Send to worker
-  if (!state.worker) {
-    handleWorkerError('Worker not initialized');
-    return;
-  }
-  state.worker.postMessage({
-    type: 'INFERENCE',
-    payload: {
-      text: text.trim(),
-      intentLabels: CONFIG.intentLabels
-    }
-  });
-}
-
-// Quick local-only response when worker is unavailable
-function sendFallbackResponse(text) {
-  if (!getActiveConversation()) {
-    createConversation();
-    renderConversationList();
-  }
-
-  addMessageToConversation('user', text);
-  appendMessageToDOM({
-    role: 'user',
-    content: text,
-    meta: {},
-    timestamp: Date.now()
-  });
+  const conv = getActiveConversation();
+  const userMsg = conv.messages[conv.messages.length - 1];
+  appendMessageToDOM(userMsg);
 
   dom.messageInput.value = '';
   dom.messageInput.style.height = 'auto';
   dom.charCount.textContent = '0';
-
   scrollToBottom();
   disableInput();
+  showStopButton();
   state.isGenerating = true;
 
-  // Simulate typing delay
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'message assistant typing-message';
-  typingDiv.innerHTML = `
-    <div class="message-avatar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6v-2H9v2z"/></svg>
-    </div>
-    <div class="message-content">
-      <div class="message-header">
-        <span class="message-author">ML Chat</span>
-        <span class="message-time">${formatTime(new Date())}</span>
-      </div>
-      <div class="typing-indicator">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-  `;
-  dom.chatContainer.appendChild(typingDiv);
-  scrollToBottom();
+  const assistantMsg = {
+    id: generateId(),
+    role: 'assistant',
+    content: '',
+    meta: {},
+    timestamp: Date.now()
+  };
+  conv.messages.push(assistantMsg);
+  state.currentStreamMessageId = assistantMsg.id;
+  saveConversations();
+  appendMessageToDOM(assistantMsg, true);
 
-  setTimeout(() => {
-    state.isGenerating = false;
-    const typingEl = dom.chatContainer.querySelector('.typing-message');
-    if (typingEl) typingEl.remove();
+  const messages = getMessagesForPrompt();
 
-    const response = generateLocalFallback(text);
-
-    addMessageToConversation('assistant', response, {});
-    appendMessageToDOM({
-      role: 'assistant',
-      content: response,
-      meta: {},
-      timestamp: Date.now()
+  if (state.useWorker && state.workerReady) {
+    state.worker.postMessage({
+      type: 'GENERATE',
+      payload: {
+        messages,
+        maxTokens: CONFIG.maxTokens,
+        temperature: CONFIG.temperature,
+        topK: CONFIG.topK
+      }
     });
-
-    scrollToBottom();
-    enableInput();
-  }, 800 + Math.random() * 600);
+  } else if (state.generator) {
+    await generateOnMainThread(messages);
+  } else {
+    handleGenerationError('Model not ready');
+  }
 }
 
-function generateLocalFallback(text) {
-  const lower = text.toLowerCase();
-  if (/\b(hi|hello|hey|good morning|good afternoon|good evening)\b/i.test(lower)) {
-    return "Hello! I'm running in fallback mode because the ML models couldn't load. Please refresh the page to try again.";
+function handleStreamToken(token) {
+  const conv = getActiveConversation();
+  if (!conv) return;
+  const msg = conv.messages.find(m => m.id === state.currentStreamMessageId);
+  if (msg) {
+    msg.content += token;
+    appendMessageToDOM(msg, true);
+    scrollToBottom();
   }
-  if (/\b(how are you|what can you do|who are you)\b/i.test(lower)) {
-    return "I'm ML Chat, a local AI assistant. The ML models failed to load. Try refreshing the page or checking your internet connection to download the models.";
+}
+
+function finalizeGeneration(response) {
+  state.isGenerating = false;
+  const conv = getActiveConversation();
+  if (conv) {
+    const msg = conv.messages.find(m => m.id === state.currentStreamMessageId);
+    if (msg) {
+      msg.content = response;
+      appendMessageToDOM(msg, false);
+      saveConversations();
+    }
   }
-  return "I'm sorry, I'm currently in fallback mode because the ML models failed to initialize. Please refresh the page to reload the models and try again.";
+  state.currentStreamMessageId = null;
+  enableInput();
+  scrollToBottom();
+}
+
+function handleGenerationError(errorMsg) {
+  state.isGenerating = false;
+  const conv = getActiveConversation();
+  if (conv) {
+    const msg = conv.messages.find(m => m.id === state.currentStreamMessageId);
+    if (msg) {
+      if (!msg.content.trim()) {
+        msg.content = "I apologize — I encountered an issue processing your message. Error: " + errorMsg;
+        appendMessageToDOM(msg, false);
+      }
+      saveConversations();
+    }
+  }
+  state.currentStreamMessageId = null;
+  enableInput();
+  scrollToBottom();
+  showToast('Error: ' + errorMsg, 'error');
+}
+
+function stopGeneration() {
+  if (state.useWorker && state.worker) {
+    state.worker.postMessage({ type: 'STOP' });
+  }
+  if (state.abortController) {
+    state.abortController.abort();
+  }
+  state.isGenerating = false;
+  const conv = getActiveConversation();
+  if (conv && state.currentStreamMessageId) {
+    const msg = conv.messages.find(m => m.id === state.currentStreamMessageId);
+    if (msg) {
+      msg.content = msg.content.trim();
+      if (msg.content) {
+        appendMessageToDOM(msg, false);
+        saveConversations();
+      } else {
+        const el = document.getElementById(state.currentStreamMessageId);
+        if (el) el.remove();
+        conv.messages = conv.messages.filter(m => m.id !== state.currentStreamMessageId);
+        saveConversations();
+      }
+    }
+  }
+  state.currentStreamMessageId = null;
+  enableInput();
 }
 
 // ============================================================
 // EVENT HANDLERS
 // ============================================================
-
-// Send button
-dom.sendBtn.addEventListener('click', () => {
-  sendMessage(dom.messageInput.value);
-});
-
-// Enter to send, Shift+Enter for new line
+dom.sendBtn.addEventListener('click', () => sendMessage(dom.messageInput.value));
+dom.stopBtn.addEventListener('click', stopGeneration);
 dom.messageInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage(dom.messageInput.value);
   }
 });
-
-// Auto-resize textarea
 dom.messageInput.addEventListener('input', () => {
   dom.messageInput.style.height = 'auto';
   dom.messageInput.style.height = Math.min(dom.messageInput.scrollHeight, 150) + 'px';
   dom.charCount.textContent = dom.messageInput.value.length;
 });
-
-// Sidebar toggle
 dom.toggleSidebar.addEventListener('click', () => {
   dom.sidebar.classList.toggle('collapsed');
   dom.sidebar.classList.toggle('open');
   dom.sidebarOverlay.classList.toggle('visible');
 });
-
-// Mobile overlay
 dom.sidebarOverlay.addEventListener('click', () => {
   dom.sidebar.classList.remove('open');
   dom.sidebar.classList.add('collapsed');
   dom.sidebarOverlay.classList.remove('visible');
 });
-
-// New chat
 dom.newChatBtn.addEventListener('click', () => {
   createConversation();
   renderConversationList();
   renderMessages();
   dom.messageInput.focus();
-
-  // Close sidebar on mobile
   if (window.innerWidth <= 768) {
     dom.sidebar.classList.remove('open');
     dom.sidebar.classList.add('collapsed');
     dom.sidebarOverlay.classList.remove('visible');
   }
 });
-
-// Clear all
 dom.clearAllBtn.addEventListener('click', () => {
   if (confirm('Are you sure you want to delete all conversations? This cannot be undone.')) {
     clearAllConversations();
   }
 });
-
-// Suggestion cards
 dom.chatContainer.addEventListener('click', (e) => {
   const card = e.target.closest('.suggestion-card');
-  if (card) {
-    const prompt = card.dataset.prompt;
-    sendMessage(prompt);
-  }
+  if (card) sendMessage(card.dataset.prompt);
 });
 
 // ============================================================
 // INITIALIZATION
 // ============================================================
-
 function init() {
   loadConversations();
   renderConversationList();
   renderMessages();
   updateStatus('loading');
 
-  // Initialize the ML worker
+  if (window.location.protocol === 'file:') {
+    showToast('For best results, serve via local HTTP: python3 -m http.server 8080', 'warning');
+    dom.loadingSubtitle.textContent = 'Loading model (file:// protocol may limit features)…';
+  }
+
   initWorker();
 }
 
-// Start the app
 init();
 </script>
 </body>
