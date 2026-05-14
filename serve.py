@@ -4,7 +4,7 @@ import http.server
 import socketserver
 import os
 
-PORT = 8000
+PORT = 5931
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

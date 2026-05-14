@@ -1,8 +1,8 @@
-# Neural Chat — Shared Context & Architecture
+# ML Chat — Shared Context & Architecture
 
 ## Project Overview
 
-**Neural Chat** is a fully offline, browser-based AI assistant powered by a pure JavaScript NLP engine. All processing happens locally — no data leaves the device, no external APIs are called, and no CDN dependencies are required.
+**ML Chat** is a fully offline, browser-based AI assistant powered by a pure JavaScript NLP engine. All processing happens locally — no data leaves the device, no external APIs are called, and no CDN dependencies are required.
 
 ---
 
